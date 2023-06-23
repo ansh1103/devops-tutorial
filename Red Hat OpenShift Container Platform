@@ -1,0 +1,22 @@
+##OpenShift Container Platform 4 Architecture
+
+Red Hat OpenShift Container Platform 4 (RHOCP 4) is a set of modular components and services built on top of Red Hat CoreOS and Kubernetes. 
+OpenShift adds platform as a service (PaaS) capabilities such as remote management, increased security, monitoring and auditing, application life-cycle management,
+and self-service interfaces for developers. It provides orchestration services and simplifies the deployment, management, and scaling of containerized applications.
+
+An OpenShift cluster can be managed the same way as any other Kubernetes cluster, but it can also be managed using the management tools provided by OpenShift,
+such as the command-line interface or the web console. This additional tooling allows for more productive workflows and makes everyday tasks much more manageable.
+
+One of the main advantages of using OpenShift is that it uses several nodes to ensure the resiliency and scalability of its managed applications.
+OpenShift forms a cluster of node servers that run containers and are centrally managed by a set of master servers. 
+A single host can act as both a master and a node, but typically you should segregate those roles for increased stability and high-availability.
+
+##Deploying an Application to an OpenShift Cluster
+OpenShift manages an application life cycle using the Source-to-Image (S2I) process. S2I takes application source code from a Git repository,
+combines it with a base container image, builds the source, and creates a container image with the application ready to run.
+
+>> `oc new-app` command : The oc new-app command takes, in its simplest form, a single URL argument that points to either a Git repository or a container image.
+It accesses the URL to determine how to interpret the argument and perform either a build or a deployment.
+Example: oc new-app http://gitserver.example.com/mygitrepo
+>> 
+
