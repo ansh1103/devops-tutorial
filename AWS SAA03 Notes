@@ -1,0 +1,309 @@
+EC2 Pricing instance:
+    > Reserved Instance 
+          - 
+
+
+=================================
+
+Aurora Cluster 
+   > Single master cluster
+         - Sinlge DB instance perform Write operations and other DB instances are Read Only  
+         - Ex: Aurora Serveless, Provisioned, Parellel Query and Global Database
+    > Multi-Master Cluster
+         - All DB instances can perfrom Read/Write operations.
+          - Ex: Aurora MySQL version 5.6.10a
+
+============================
+Amazon Cognito: 
+    > Amazon Cognito provides authentication, authorization, and user management for your web and mobile apps. Users can sign in directly with a user name and password, or through a trusted third party.
+    > User Pools
+        - user pool is a user directory in Amazon Cognito. 
+        -  social sign-in with FB, Google, Amazon and through SAML and OIDC IdP from your user pool
+
+   > Identity Pools
+         - with Identity pool, user can create temporary AWS credentials to access AWS service such as S3 and DynamoDB
+=============================
+
+IAM Permission Boundary
+    - AWS supports permission boundary form IAM entities(Users and Roles)
+    - it is a advance feature for using managed policy to set the maximum permission that an identity-based policies can granted to an IAM entity
+    -  An entity's permission boundary allow it to perform only the actions that are allowed by both its Identity-based policy and its permission boundary.
+    - Not applicable to IAM groups
+
+==============================
+
+Amazon S3 features:
+    > Lifecycle policies
+         - When creating a lifecycle policy, you configure two parameters for each transition or deletion action:
+                ● Whether the policy should apply to all objects in the bucket or only a group of objects with matching prefix
+                ● The number of days after object creation before the action is applied
+     > S3 Bucket Policies and ACLS:
+          - Bucket Plocies are JSON-based policy used for access control. You add a bucket policy to a bucket to grant other AWS accounts or IAM users access permissions for the bucket and the objects in it
+           - ACLs are preset optins that you can enable to allow read/write access for other AWS accounts, users or the public
+     > Object Ownership:
+           - If you have external users uploading objects to a bucket you own, you can enable bucket-owner-full-control canned access control list (ACL) to  automatically assume full ownership over the objects they upload.
+      > Multipart upload:
+            - For object larger than 100 MB, we can use Multipart Upload.
+      > S3 Transfer Acceleration:
+            - S3 TA leverages Amazon CloudFront's globally distributed edge locations to optimize long distance transfers from your client to Amazon S3
+            - S3 TA only bills you when there is an improvement compared to a regular S3 transfer.
+      > Statis Web Hosting:
+            - An S3 bucket can be made to host static files such as images and webpages. Since an S3 bucket is public, you can configure it as a website, using the S3 URL as your domain name.
+       > Versioning:
+             - Versioning lets you keep a copy of an object whenever it is overwritten as its versions
+             - When you suspend versioning, any future updates on your objects will not create a new version, but existing versions will still be retained.
+       > MFA Delete:
+             - MFA delete is a security feature that is used together with S3 Versioning to prevent unauthorized or accidental deletions in your S3 bucket.
+       > Cross-Region Replicatin and Same-Region Replication:
+              -  Replication is a feature that allows you to replicate objects from an S3 bucket in one region to another bucket in the same region or in another region.
+              - . By default, S3 replication does not replicate existing objects, only objects that have been uploaded after replication was enabled. 
+       > Object Lock:
+              - Allows you to store objects using a write-once-read-many (WORM) model. Object lock prevents an object from being deleted or overwritten for a fixed amount of time or indefinitely.
+        > S3 Access Point:
+               - A feature that simplifies data access for any AWS service or 3rd party client application that stores data in an Amazon S3 bucket.
+               - An Amazon S3 Access Point allows customers to create unique access control policies for each S3 access point to control access to shared datasets easily
+        > S3 Event Notification:
+               - This lets you receive notifications on certain events that occur in your S3 bucket. To enable notifications, you must first add a notification configuration that identifies the events you want S3 to publish and the destinations (SNS, SQS, Lambda) where you want the notifications to be sent.
+               - . Amazon S3 can publish notifications for the following events:
+                      ● New object created events
+                      ● Object removal events
+                      ● Restore object events
+                      ● Replication events
+        > Cross-origin Resource Sharing(CORS):
+              - If your S3 bucket is used for web hosting, verify if you need to enable CORS.
+              - To configure your bucket to allow cross-origin requests, you create a CORS configuration document. This is a document with rules that identify the origins that you will allow to access your bucket, the operations (HTTP methods) that will support each origin, and other operation-specific information.
+        > Presigned URLS:
+             - Object owners can share objects with other users or enable users to upload objects to their S3 buckets using a presigned URL.        
+              - A presigned URL grants others time-limited permission to download or upload objects from and to the owner's S3 buckets. When object owners create presigned URLs, they need to specify their security credentials, the bucket name and object key, the HTTP method (GET to download the object), and expiration date and time. 
+
+==============================
+
+Options to protect data at rest in S3
+    > Server-Side Encryption
+         - request S3 to encrypt your object before saving it on disks in its data centers and then decrypt it when you download the objects
+         - 3 options for SSE
+              i) SSE with Amazon S3-Managed keys(SSE-S3)
+              ii) SSE with Customer Master Keys Stored in AWS KMS (SSE-KMS) --> similar ro S3; key is rotated automatically; usage logged for auditing purpose
+              iii) SSE with Customer-Provided Keys (SSE-C) --> customer manage the encryption key and S3 manages the encryption
+    > Client-Side Encryption
+         - Encrypt data client-side and upload the encypted data to S3. In this case, customer manage the encryption process, the encyption keys and the related tools.
+ ================================
+
+Options to launch instances in AWS
+    > Launch Configuration
+          - use case: best for simple use case where you need to few instances with fixed settings
+    > Launch Template
+          - user case: need to launch multiple instances with consistent configurations and more advavnced options
+          - can user launch template to define the settings(AMI, instance type, SGs, key pairs etc for an instance in JSON/YAML file which then can be used to launch multiple instance with the same settings
+
+=================================
+
+ Default Termination Policy in EC2 auto scaling from priority - high to low
+     > first priority --> to any allocation strategy for On-Demand and Spot instances
+     > secondly --> any instance with the oldest luanch template unless there is an isntance that uses a launch configuration
+     > Thirdly --> any instance which has the oldest launch configuration
+     > Fourthly --> any instance that are close to next billing hour.
+
+=================================
+
+Encrypt the unencypted RDS DB
+  > Take a snapshot of the database, copy it as encypted snapshot and restore a database from the encypted snapshot. Terminate the previous db.
+
+=================================
+
+Steps to Migrate AWS account from AWS Org A to and AWS Org B
+   > Remove the member account from the old org.
+   > Send an invite to the member account from the new organisation.
+   > Accept the invite to the new organisation from the member account
+
+================================
+
+Amazon Aurora features:
+    > usually deployed as a database cluster, which consists of primary DB instance and multiple AUrora replicas or DB instances
+    > High performance and Multi-AZ available
+    > Distributed storage for durability, performance and fast recovery
+    > Flexible and auto scaling compute i.e. it can automatically grow or scale as needed
+    > low latency and Multi-Region Replication
+    > Continuous Automated backups and retains restore data for the length of the retention period from 1 to 35 days
+    > backups are stored in S3
+    > Choice of instances and serverless
+    > upto 15 low-latency Read Replicas
+    > Auditing
+    > allows you to create database endpoints. YOu can group the individual instances and associate them with a particular endpoints
+    > Use-case for Aurora Serverless
+          - recommended for applications with sporadic usage workloads or with unpredictable usage. 
+          - Let's say you have a legacy application hosted on on-premise that you wnat to migrate to AWS cloud. You can re-architect your application and turn it into      a microservice architecture. The application containers can be run using AWS Fargate and your database can be hosted in Aurora Serverless.
+
+===========================================
+
+Amazon Aurora Global Database
+    > designed for globally distributed applications.
+    > allows a single Aurora daabase to span multiple AWS regions that you define.
+    > spans at least two AWS regions wherein the primary region supports an Aurora DB cluster that has one Writer Aurora DB instance. The secondary regions run a read-only Aurora DB cluster that is made up entirely of Aurora Replicas
+     > provide an RPO of 1 second and an RTO of 1 minute. 
+
+===============================
+
+AWS Resource Access Manager
+   >  service that enables you to easily and securely share AWS resources with any AWS account or within your AWS organisation.
+   > 
+
+===============================
+
+Amazon FSx
+    > family of file system services in AWS
+    > handles the manual task of hardware provisioning, patching and creating backups - allowing you to focus on your applications and end users
+    > File system types :
+         i) Amazon FSx for Lustre
+               - similar to Amaon EFS
+               - POSIX-compliant shared file system which only supports Linux servers
+               - can provide a throughput of 100s of GBs per second and millions of IOPS 
+               - primarily used to High-Performance Computing, ML or HPC applcitions that needs high-perf parallel storage for frequesntly accessed 'hot' data
+         ii) Amazon FSx for Windows File Server
+              - fully managed MS WIndows File Server
+              - can access this file share using Server Message Block(SMB) protocol, commonly used by Windows Server
+              - can also integrate your exisitng Microsoft Active Directory to provision file system accessto your users
+              - can be used as shared file storage for your Microsoft SharePoint, Microsoft SQL Server DB, Widnow container or any windows-based applications.
+
+================================
+
+Amazon EFS
+    > POSIX-compliant shared file system that can simultaneously accessed by multiple EC2 instances in different AZs.
+    > supports only Linux based EC2 instance and can't be used with Windows-based Ec2 instance
+    > uses Network File System (NFS) protocol i,e, you have to mount the EFS file system to the EC2 instances or to your on-premise servers
+    > can be choosen between a Standard and Infrequent Access Storage class.
+    > can use a lifecycle policy to automatically move data from the Standard class to IA class, just like S3
+    > To access EFS from a EC2 instance, ECS container or a Lambda function, you must create moutn targets in your VPC with a tool - Amazon EFS mount helper
+    > there are multiple ways to mount a mount target:
+           1. You can mount your target as is after you SSH into your instance using the mount command.
+           2. You can mount your target with a TLS parameter to enable encryption in-transit.
+           3. You can mount your target with IAM authorization (instance profile or named profile).
+           4. You can specify an EFS access point in your mount parameters.
+    > If the goal is to recreate the entire file system in another region, we can user AWS BACKUP to take a backup of your EFS file system and have it copy over to a destination region and stores it in a surable vault.
+    > AWS Backup is able to backup your file system no matter the storage class u are using, but restoring a backup restores the files to the Standard Storage class.
+    > backup settings includes whether to transition your backups to cold storage to loaer storage cost and the retention duration of you backups.
+    > If your goal is to migrate or replicate data from one EFS file system to another, then we can use AWS DataSync. It is able to copy files between two EFS file systems even if they beong to different regions or AWS accounts.
+    > Another advantage of usign DataSync is that you can copy files over private AWS network using VPC peering between the source EFS VPC and destination EFS VPC.
+    > Offers 2 performance modes : no additional cost
+          i) General Purpose:
+               - ideal for latency-sensitive use cases
+               - choosen by default while creating your file system 
+          ii) Max I/O: 
+               - Not available for one-zone storage class
+               - can scale to higher levels of aggregate thorughput and oprations per seconds
+               - ideal of use cases like highly parellelized applications and workload such as big data processing, media processing, genomic analysis
+     > Also offers 2 throughput modes:
+           i) Bursting Throughput: 
+                - With Bursting Throughput mode, throughput on Amazon EFS scales as the size of your file system in the standard storage class grows.
+           ii) Provisioned Throughput
+               -  With Provisioned Throughput mode, you can instantly provision the throughput of your file system (in MiB/s) independent of the amount of data stored.
+
+=========================================
+
+Amazon EFS Storage Lifecyclt
+    > not the cheapest storage service in AWS
+    > When enabled, lifecycle management migrates all your files that have not been accessed for a set period of time to the Infrequent Access storage class.
+    > You can't set your own time period. You define the period of time from the selection below in your lifecycle policy:
+         ● None
+         ● 7 days since last access
+         ● 14 days
+         ● 30 days
+         ● 60 days
+         ● 90 day
+.=========================================
+
+Amazon Kinesis
+    > suite of service that you use to analyze data streams in real time i.e. data is available in matter of miliseconds.
+    > allows you to collect, transform, process, load and analyze the streaming data in real time.
+     > comprises of different services:
+          i)  Kinesis Data Streams:
+              - massively scalable and durable real-time data streaming service which maintains the order of the records.
+              - can continuously capture gigabytes of data per seconds from thousands of different sources.
+              - data consumers(sent to) are typically Kinesis Data Analytics, Amazon EMR, Amazon EC2, AWS Lambda
+              - use-cases: 
+                   -> if you need a solution that captues the clickstream data from multiple websites in real time and analyze it using batch processing, then we can user Kinesis dta stream
+                   -> can be used for a popular mobile game that streams score updates to a backend which then post the result in the leaderboard.
+                    -> IoT, online marketplaces with millions of financial
+transactions, real-time recommendations systems
+
+            ii) Kinesis Data Firehose:
+                - fully managed service to transform and load stream data into dta store and analytics tools.
+                 - can deliver data to Amazon S3, Redshift, elasticsearch and any HTTP endpoint
+                 - Kinesis Firehose immediately captures, transforms, and loads streaming data into your target consumers.
+                 - Data consumers are typically Amazon S3,
+Amazon Redshift, Amazon Elasticsearch Service, generic HTTP endpoints,Datadog, New Relic,MongoDB, and Splunk
+
+            iii) Kinesis Video Streams:
+                - type of data strams that is used for videos. IT securely streams video from connected devices or source to AWS.
+                - automatically provisions and scales all the
+required infrastructure to ingest streaming video data from millions of devices. 
+                - Data consumers are typically Analysis results can
+be sent to another Kinesis stream, a Kinesis Data Firehose delivery stream, or a Lambda function
+
+             iv) Kinesis Data Analytics:
+                 - serverless service that enables you to analyze your streaming data, acquire actionable insights, and
+respond to events in real-time.
+                 - Kinesis Data Analytics lets you run SQL queries
+immediately on the streamed data. 
+                 - TheAmazon Kinesis Data Stream can send the streaming data to Kinesis Data Analytics for running near-real-time queries. You can also set up a REST API in API Gateway that can be used as an Amazon Kinesis proxy to allow
+access to your data points.
+                 - Data consumers are typically Amazon Rekognition, Amazon SageMaker, MxNet, TensorFlow, HLS-based media playback, custom media processing application
+
+========================================
+
+Amazon DynamoDB
+    > fully managed NoSQL database which is highly scalable as it automatically scales out the database without manual intervention and can provide single-digit millisecond performance.
+    > is serverless so that the user dont have to provision and manage any servers
+    > composed fo a single table by default which is refered as DynamoDB table.
+    > In DynamoDB table, "row" is called "Item, "column" is "attribute", "index" is "secondary index", "view" is "global secondary index"
+    > 2 types of indexes which are local secondary index and global seconday index. 
+         - local secondary index lets the user query over a single partition only, which is based on partition key value of the query.
+         - global seconday index allows you to query data across all partitions  of the entire table.
+    > Features: 
+         - By default, you only launch a single DynamoDB table in an AWS region that you choose. Alternatively,  DynamoDB Global Tables provides mulit-region replication to your data store.
+         - Next feature is DynamoDB Streams. This is a stram of data that captures all of the data changes made to the items stored in your table.So if a new item is added, then that same data will also flow out of the BynamoDB stream at the point in time when the actual change occurred.
+         - it also has a feature to automatically expire the items based on their timestamp using TTL. IT allows you to define a per-item timestamp that can help you determine when an item is no longer needed. DynamoDB deletes the item from your table after the date an time of the specified timestamp.
+         - It also has a caching feature called DynamoDB Accelerator or DAX. Most of the time,  the reponse times of a DynamoDB table can be measured in single-digit milliseconds. However if you have a use-case which requires a response time in microseconds, we can use its DAZ feature.This is a type of in-memory cache that significantly reduces the response times of your table.
+         - 2 types of Read/Write capacity mode available
+              i) Provisioned Capacity mode
+              ii) On-demand Capcity mode
+         -  Backup options available are:
+              i) POint-in-time Recovery : it enables continuous backups to your table that allow you to restore your table at a specific point in time that you specify. So if you want to restore your table and its content last week, you just use the Point-In-Time Recovery option. You can restore your table to any point in time during the last 35 days.
+              ii) On-Demand Backup and Restore: is quite a manual process and does not continuously back up to your table, unlike PITR. You have to do the backup yourself for a particular time that you choose and restore it manually.
+          - I f you want to protect the data in transit or at rest when communication with EC2 isntances, you should create Gateway endpoints and add the GW Endpoint to the as route to the VPC Route table
+
+=======================================
+
+Health Checks:
+     > By default, An Auto Scaling Group only uses EC2 instance status checks to determine instance health.These status checks identify failure conditions, such as a loss of network connectivity, loss of system power, exhausted memory, or an incompatible kernel.
+     > Additionally, we can add ELB health checks to your registered ASG. Adding a load balancer’s health checks to the ASG allows EC2 Auto Scaling to automatically replace instances that fail either their Amazon Elastic Compute Cloud (Amazon EC2) status checks or the Amazon ELB health checks.
+
+sSs
+=======================================
+
+Storage options
+    > For random IOPS, for example - 40,000 random IOPS , use  SSD-Backed Storage Optimized (i2) instances which provide more than 365,000 random IOPS
+    > maxed Provisioned IOPS of 256,000  --> io2 Block express volumes on Nitro- based EC2 
+instance
+    > IOPS of 64,000 --> Provisioned io2 instance
+    > IOPS of 16,000 --> GP3 instances
+    > EBS Multi-Attach feature is  supported by only io1 and io2 volume type(i.e. Provisioned)
+
+=========================================
+
+The following services have caching capabilities:
+i. Cloud Front: Caches media files, videos, pictures at edge locations near end user.
+ii. API Gateway
+iii. ElastiCache: Consists of Memcached & Redis
+iv. Dynamo DB Accelerator (DAX)
+
+======================================
+
+Restrict access to content via CloudFront using:
+   > Signed URL : which can be used to restict content access to specific users
+   > OAI (Origin Acess Identity) : which can be use to restrict access to your S3 content by allowing CF to access your content but prevents other from accessing them
+
+======================================
+
+1. sECURITY ASCEPT
+2. 
